@@ -1,6 +1,6 @@
 const express = require('express');
 const app = express();
-const port = 5000;
+const port = 5000 || process.env.PORT;
 const vendorRoutes = require('./routes/vendorRoutes');    
 const bodyParser = require('body-parser');  
 const firmRoutes = require('./routes/firmRoutes');
@@ -29,6 +29,6 @@ app.listen  (port, () => {
     console.log(`Server is running on port ${port}`);
 });
 
-app.get('/home', (req, res) => {
+app.get('/', (req, res) => {
     res.send('Hello World!');
 });
