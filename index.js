@@ -6,9 +6,11 @@ const bodyParser = require('body-parser');
 const firmRoutes = require('./routes/firmRoutes');
 const productRoutes = require('./routes/productRoutes');
 const path = require('path');
+const cors = require('cors');
 
 const dotenv = require('dotenv');
 dotenv.config();
+app.use(cors());
 
 const mongoose = require('mongoose');
 

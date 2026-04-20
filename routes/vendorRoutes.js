@@ -5,5 +5,6 @@ const router = express.Router();
 router.post('/register', vendorController.vendorRegister);
 router.post('/login', vendorController.vendorLogin);
 router.get('/allvendors', vendorController.allVendors);
+router.get('/singlevendor/:vendorId', vendorController.singleVendor);
 
 module.exports = router;

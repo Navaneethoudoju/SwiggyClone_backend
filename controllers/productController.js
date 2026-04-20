@@ -1,6 +1,7 @@
 const product = require('../models/Product');
 const multer = require('multer');
 const Firm = require('../models/Firm');
+const path = require('path');
 
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
@@ -17,10 +18,12 @@ const upload = multer({
 
 const addProduct = async (req, res) => {
     try {
-        const { productName, price, category, bestseller, description } = req.body;
+        const { productName, price, category, bestSeller, description } = req.body;
         const image = req.file ? req.file.path : undefined;
+        console.log(req.body);
 
         const firmId = req.params.firmId; // Assuming you have a route parameter for firm ID
+        console.log(firmId);
         const firm = await Firm.findById(firmId);
         if (!firm) {
             return res.status(404).json({ error: 'Firm not found' });
@@ -30,7 +33,7 @@ const addProduct = async (req, res) => {
             price,
             category,
             image,
-            bestseller,
+            bestSeller,
             description,
             firm: firm._id,
         });
@@ -48,6 +51,7 @@ const addProduct = async (req, res) => {
 
 const getProductByFirm = async (req, res) => {
     try {
+        console.log('api called');
         const firmId = req.params.firmId;
         const firm = await Firm.findById(firmId);
         if (!firm) {

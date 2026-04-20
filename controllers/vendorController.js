@@ -13,7 +13,7 @@ const vendorRegister = async (req, res) => {
         if (vendorEmail) {
             return res.status(400).json({ message: 'Email already exists' });
         }
-        const hashedPassword = await bycrypt.hash(password, 10);
+        const hashedPassword = await bcrypt.hash(password, 10);
         const newVendor = new Vendor({
             username,
             email,
@@ -38,7 +38,8 @@ const vendorLogin = async (req, res) => {
         }
 
         const token = jwt.sign({ id : vendor._id}, secretKey, { expiresIn: '1h' });
-        res.status(200).json({ message: 'Vendor logged in successfully',token });
+        const vendorId = vendor._id;
+        res.status(200).json({ message: 'Vendor logged in successfully',token ,vendorId });
         console.log(email);
     }
     catch (error) {
@@ -58,11 +59,17 @@ const allVendors = async (req, res) => {
 };
 const singleVendor = async(req, res) => {
     try {
-        const vendor= await Vendor. findById(req.paramas.id).populate('Firm');
+        console.log('api called');
+        const vendorId = req.params.vendorId;
+        console.log(vendorId);
+        const vendor= await Vendor. findById(vendorId).populate('Firm');
         if(!vendor){
             return res.status(404).json({message: 'Vendor not found'});
         }
-        res.status(200).json(vendor);
+        const firmId = vendor.Firm[0]._id;
+        const firmName = vendor.Firm[0].firmName;
+        console.log("firmId:" ,firmId);
+        res.status(200).json({ vendor, firmId, firmName });
     } catch (error) {
         res.status(500).json({ message: 'Server error' });
         console.error('Error fetching vendor:', error);
